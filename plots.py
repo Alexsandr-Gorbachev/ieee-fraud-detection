@@ -14,9 +14,14 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from sklearn.metrics import roc_curve, auc, confusion_matrix, roc_auc_score
+from sklearn.metrics import (
+    roc_auc_score, classification_report, confusion_matrix, 
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_curve, precision_recall_curve, average_precision_score
+)
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.feature_selection import mutual_info_classif
+from matplotlib.patches import Patch
 
 # Настройки для красивых графиков
 sns.set_style("whitegrid")
@@ -1057,12 +1062,16 @@ def print_model_metrics(y_true, y_pred_proba, y_pred, fold_name="ПОСЛЕДН�
     print("="*100)
     
     test_auc = roc_auc_score(y_true, y_pred_proba)
+    # Добавляем расчет PR AUC (требует вероятностей, как и ROC AUC)
+    test_pr_auc = average_precision_score(y_true, y_pred_proba)
+    
     test_acc = accuracy_score(y_true, y_pred)
     test_precision = precision_score(y_true, y_pred)
     test_recall = recall_score(y_true, y_pred)
     test_f1 = f1_score(y_true, y_pred)
     
     print(f"\nROC-AUC:   {test_auc:.4f}")
+    print(f"PR-AUC:    {test_pr_auc:.4f}")  # Вывод в консоль
     print(f"Accuracy:  {test_acc:.4f}")
     print(f"Precision: {test_precision:.4f}")
     print(f"Recall:    {test_recall:.4f}")
@@ -1070,6 +1079,7 @@ def print_model_metrics(y_true, y_pred_proba, y_pred, fold_name="ПОСЛЕДН�
     
     return {
         'auc': test_auc,
+        'pr_auc': test_pr_auc,  # Добавлено в словарь
         'accuracy': test_acc,
         'precision': test_precision,
         'recall': test_recall,
