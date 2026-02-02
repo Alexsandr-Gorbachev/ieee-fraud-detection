@@ -15,8 +15,13 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import TimeSeriesSplit, StratifiedKFold, StratifiedShuffleSplit, cross_validate
-from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, auc, roc_curve
+from sklearn.metrics import (
+    roc_auc_score, classification_report, confusion_matrix, 
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_curve, precision_recall_curve, average_precision_score
+)
 from sklearn.feature_selection import mutual_info_classif
+from matplotlib.patches import Patch
 import warnings
 warnings.filterwarnings('ignore')
 from typing import List
